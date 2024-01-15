@@ -4,8 +4,180 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Simple Dir</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+    .names-input { 
+        /* position: absolute;  */
+        border: 1px solid #ccc; 
+        border-radius: 4px; 
+        width: 200px;
+        /* padding: 5px;  */
+        /* box-shadow: 2px 2px 5px #00000033;  */
+        /* width: fit-content;  */
+        max-width: 400px;
+        /* max-height: 80px; */
+        overflow: auto;
+    } 
+    
+    .names-input ul { 
+        list-style: none; 
+        padding: 0; 
+        margin: 0; 
+    } 
+    
+    .names-input li { 
+        display: inline-block; 
+        background-color: #f2f2f2; 
+        color: #333; 
+        border-radius: 5px; 
+        padding: 5px 10px; 
+        margin-right: 5px; 
+        margin-bottom: 5px; 
+    } 
+    
+    .names-input input[type="text"] { 
+        border: none; 
+        outline: none; 
+        padding: 5px; 
+        font-size: 14px; 
+    } 
+    
+    .names-input input[type="text"]:focus { 
+        outline: none; 
+    } 
+    
+    .names-input .delete-button { 
+        background-color: transparent; 
+        border: none; 
+        color: #999; 
+        cursor: pointer; 
+        margin-left: 5px; 
+    } 
+    </style>
 </head>
-<body>
-    <h1>Welcome</h1>
+<body class="flex flex-col gap-10 justify-center items-center">
+    <h1 class="text-3xl font-semibold m-auto">Welcome</h1>
+    <div class="flex flex-col justify-center items-center">
+        <div>
+            <label for="sbfolder">Folder And Subfolders</label>
+            <input onclick="radioClick()" checked type="radio" id="sbfolder" name="type">
+        </div>
+        <div>
+            <label for="cufolder">Custom Folders(With Your Name List)</label>
+            <input onclick="radioClick()" type="radio" id="cufolder" name="type">
+        </div>
+    </div>
+    <form id="sbfolder-form" method="post" action="/create-subfolders" class="flex flex-col justify-center items-center gap-10">
+        <div class="flex flex-col justify-center items-center">
+            <input name="path" class="w-52 px-1 border-2 py-3 h-4" type="text" placeholder="Enter Destination Path">
+            <span class="text-sm text-red-600">(the default is: c://)</span>
+        </div>
+        <div class="flex flex-col justify-center items-center">
+            <input name="parent" class="w-52 px-1 border-2 py-3 h-4" type="text" placeholder="Enter Parent Folder Name">
+            <span class="text-sm text-red-600">(if you don't have one leave it blank)</span>
+        </div>
+        <div class="flex flex-col justify-center items-center">
+            <input required name="subcount" onkeypress="return event.charCode >= 48" class="w-52 px-1 border-2 py-3 h-4" type="number" min=1 placeholder="Number Of Subfolders">
+        </div>
+        <div class="flex flex-col justify-center items-center">
+            <input required name="subname" class="w-52 px-1 border-2 py-3 h-4" type="text" placeholder="Name Of Subfolders">
+            <span class="text-xs text-red-600">format of subfolder names: subfolder name number</span>
+            <span class="text-xs text-red-600">for example: Episode 6</span>
+        </div>
+        <button class="px-2 py-3 bg-green-500 text-white rounded-md">Create Folders</button>
+    </form>
+    <form id="cufolder-form" method="post" action="/create-customfolders" class="hidden flex-col justify-center items-center gap-10">
+        <div class="flex flex-col justify-center items-center">
+            <input name="path" class="w-52 px-1 border-2 py-3 h-4" type="text" placeholder="Enter Destination Path">
+            <span class="text-sm text-red-600">(the default is: c://)</span>
+        </div>
+        <div class="names-input"> 
+            <ul id="names"></ul> 
+            <input type="text" id="input-names" 
+                placeholder="Folder Name" /> 
+        </div> 
+        <span id="tip" class="text-xs text-red-600">Click Enter To Add Another Name</span>
+        <input name="names" id="main-names" type="text" style="display: none;">
+        <button class="px-2 py-3 bg-green-500 text-white rounded-md">Create Folders</button>
+    </form>
+    
+
+
+    <script>
+        function radioClick() {
+            let sbfolder = document.getElementById("sbfolder")
+            let cufolder = document.getElementById("cufolder")
+            if(cufolder.checked){
+                document.getElementById("cufolder-form").style.display = "flex"
+                document.getElementById("sbfolder-form").style.display = "none"
+            }
+            else{
+                document.getElementById("cufolder-form").style.display = "none"
+                document.getElementById("sbfolder-form").style.display = "flex"
+            }
+        }
+        var namesList = []
+
+        window.addEventListener("DOMContentLoaded", (event) => {
+            
+                
+            // Add an event listener for keydown on the input element
+            // Get the tags and input elements from the DOM 
+            var names = document.getElementById('names'); 
+            var input = document.getElementById("input-names"); 
+            
+            
+            input.addEventListener('keydown', function (event) { 
+                // Check if the key pressed is 'Enter' 
+                if (event.key === 'Enter') {
+                    document.getElementById("tip").style.display = "none"
+                    // Prevent the default action of the keypress 
+                    // event (submitting the form) 
+                    event.preventDefault(); 
+                
+                    // Create a new list item element for the tag 
+                    const tag = document.createElement('li'); 
+                
+                    // Get the trimmed value of the input element 
+                    const tagContent = input.value.trim(); 
+                
+                    // If the trimmed value is not an empty string 
+                    if (tagContent !== '') { 
+                
+                        // Set the text content of the tag to  
+                        // the trimmed value 
+                        tag.innerText = tagContent; 
+                        namesList.push(tagContent)
+                        // Add a delete button to the tag 
+                        tag.innerHTML += '<button class="delete-button">X</button>'; 
+                        
+                        // Append the tag to the tags list 
+                        names.appendChild(tag); 
+                        document.getElementById('main-names').value = namesList
+                        // Clear the input element's value 
+                        input.value = ''; 
+                        
+                    } 
+            } 
+        }); 
+
+
+
+        // Add an event listener for click on the tags list 
+        names.addEventListener('click', function (event) { 
+            input.style.display = "block"
+            // If the clicked element has the class 'delete-button' 
+            if (event.target.classList.contains('delete-button')) { 
+            
+                // Remove the parent element (the tag) 
+                event.target.parentNode.remove(); 
+                namesList = namesList.filter(e => e !== event.target.parentNode.textContent.replace('X' , ''));
+            } 
+        }); 
+        })
+
+    </script>
+
+
 </body>
 </html>
