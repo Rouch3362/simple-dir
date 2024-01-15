@@ -56,6 +56,25 @@
     </style>
 </head>
 <body class="flex flex-col gap-10 justify-center items-center">
+
+
+    <% if (message) { %>
+        
+        <script>
+            setTimeout(() => {
+                const alert = document.querySelector(".alert")
+                alert.classList.remove("show")
+                alert.classList.add("hide")
+            }, 3000);
+        </script>
+        <% if (message.length > 0) { %>
+            <div class="alert z-50 capitalize mt-20 text-white rounded-lg flex h-fit bg-yellow-500 absolute show flex-row items-center justify-center w-80 text-center px-5 py-2">
+                <%= error %>
+            </div>
+        <% } %>
+    <% } %>
+
+
     <h1 class="text-3xl font-semibold m-auto">Welcome</h1>
     <div class="flex flex-col justify-center items-center">
         <div>
