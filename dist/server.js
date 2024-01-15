@@ -11,5 +11,5 @@ const port = process.env['PORT'] || 3000;
 const app = (0, express_1.default)();
 app.set("view engine", 'ejs');
 app.use(body_parser_1.default.urlencoded({ extended: false }));
-app.use("/", main_1.router);
+app.use("", main_1.router);
 app.listen(port, () => console.log(`Server Is Listening On Port ${port}`));
