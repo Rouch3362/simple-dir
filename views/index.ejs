@@ -53,6 +53,47 @@
         cursor: pointer; 
         margin-left: 5px; 
     } 
+    @keyframes show{
+        from{
+            display: none;
+            opacity: 0;
+            left: -50px;
+        }
+        to{
+            display: block;
+            opacity: 1;
+            left: 20px;
+        }
+    }
+
+        @keyframes hide {
+        0%{
+            display: block;
+            opacity: 1;
+            left: 20px;
+        }
+        50%{
+            display: block;
+            opacity: 1;
+            left: 30px;
+        }
+        100%{
+            display: none;
+            opacity: 0;
+            left: -50px;
+        }
+    }
+
+    .show{
+        animation: show 0.75s forwards;
+    }
+    .hide{
+        animation: hide 0.75s forwards;
+    }
+
+    .rsds{
+        font-size: xx-large;
+    }
     </style>
 </head>
 <body class="flex flex-col gap-10 justify-center items-center">
@@ -69,7 +110,7 @@
         </script>
         <% if (message.length > 0) { %>
             <div class="alert z-50 capitalize mt-20 text-white rounded-lg flex h-fit bg-yellow-500 absolute show flex-row items-center justify-center w-80 text-center px-5 py-2">
-                <%= error %>
+                <%= message %>
             </div>
         <% } %>
     <% } %>
@@ -88,12 +129,14 @@
     </div>
     <form id="sbfolder-form" method="post" action="/create-subfolders" class="flex flex-col justify-center items-center gap-10">
         <div class="flex flex-col justify-center items-center">
-            <input name="path" class="w-52 px-1 border-2 py-3 h-4" type="text" placeholder="Enter Destination Path">
+            <div>
+                Desktop: <input id="checkBox" name="desktop" type="checkbox" onclick="checkBoxClick()">
+            </div>
+            <input name="path" id="path" class="w-52 px-1 border-2 py-3 h-4" type="text" placeholder="Enter Destination Path">
             <span class="text-sm text-red-600">(the default is: c://)</span>
         </div>
         <div class="flex flex-col justify-center items-center">
-            <input name="parent" class="w-52 px-1 border-2 py-3 h-4" type="text" placeholder="Enter Parent Folder Name">
-            <span class="text-sm text-red-600">(if you don't have one leave it blank)</span>
+            <input required name="parent" class="w-52 px-1 border-2 py-3 h-4" type="text" placeholder="Enter Parent Folder Name">
         </div>
         <div class="flex flex-col justify-center items-center">
             <input required name="subcount" onkeypress="return event.charCode >= 48" class="w-52 px-1 border-2 py-3 h-4" type="number" min=1 placeholder="Number Of Subfolders">
@@ -107,7 +150,10 @@
     </form>
     <form id="cufolder-form" method="post" action="/create-customfolders" class="hidden flex-col justify-center items-center gap-10">
         <div class="flex flex-col justify-center items-center">
-            <input name="path" class="w-52 px-1 border-2 py-3 h-4" type="text" placeholder="Enter Destination Path">
+            <div>
+                Desktop: <input id="checkBox2" name="desktop" type="checkbox" onclick="checkBoxClick2()">
+            </div>
+            <input name="path" id="path2" class="w-52 px-1 border-2 py-3 h-4" type="text" placeholder="Enter Destination Path">
             <span class="text-sm text-red-600">(the default is: c://)</span>
         </div>
         <div class="names-input"> 
@@ -123,6 +169,26 @@
 
 
     <script>
+        function checkBoxClick() {
+            console.log(document.getElementById("checkBox").checked)
+            if (document.getElementById("checkBox").checked) {
+                document.getElementById("path").style.pointerEvents = "none"
+                document.getElementById("path").value = ""
+            }
+            else{
+                document.getElementById("path").style.pointerEvents = "all"
+            }
+        }
+        function checkBoxClick2() {
+            console.log(document.getElementById("checkBox2").checked)
+            if (document.getElementById("checkBox2").checked) {
+                document.getElementById("path2").style.pointerEvents = "none"
+                document.getElementById("path2").value = ""
+            }
+            else{
+                document.getElementById("path").style.pointerEvents = "all"
+            }
+        }
         function radioClick() {
             let sbfolder = document.getElementById("sbfolder")
             let cufolder = document.getElementById("cufolder")
