@@ -11,11 +11,12 @@ const connect_flash_1 = __importDefault(require("connect-flash"));
 const express_session_1 = __importDefault(require("express-session"));
 const port = process.env['PORT'] || 3000;
 const app = (0, express_1.default)();
+// setup view engine (ejs)
 app.set("view engine", 'ejs');
 app.use(body_parser_1.default.urlencoded({ extended: false }));
 // setup express-session
 app.use((0, express_session_1.default)({
-    secret: process.env['SESSION_SECRET'],
+    secret: "roach",
     resave: false,
     saveUninitialized: true,
     cookie: {
