@@ -15,8 +15,9 @@ const app = (0, express_1.default)();
 app.set("view engine", 'ejs');
 app.use(body_parser_1.default.urlencoded({ extended: false }));
 // setup express-session
+const sessionSecret = process.env["SESSION_SECRET"];
 app.use((0, express_session_1.default)({
-    secret: "roach",
+    secret: sessionSecret,
     resave: false,
     saveUninitialized: true,
     cookie: {
