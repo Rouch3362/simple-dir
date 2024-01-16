@@ -8,15 +8,16 @@ const port = process.env['PORT'] || 3000
 
 const app = express()
 
-
+// setup view engine (ejs)
 app.set("view engine" , 'ejs')
 app.use(bodyParser.urlencoded({extended: false}))
 
 
 // setup express-session
+const sessionSecret: any = process.env["SESSION_SECRET"]
 app.use(
     session({
-      secret: process.env['SESSION_SECRET'],
+      secret: sessionSecret,
       resave: false,
       saveUninitialized: true,
       cookie: {
