@@ -14,10 +14,10 @@ app.use(bodyParser.urlencoded({extended: false}))
 
 
 // setup express-session
-const sessionSecret: any = process.env["SESSION_SECRET"]
+// const sessionSecret: any = process.env["SESSION_SECRET"]
 app.use(
     session({
-      secret: sessionSecret,
+      secret: "something",
       resave: false,
       saveUninitialized: true,
       cookie: {
