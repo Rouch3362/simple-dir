@@ -2,9 +2,11 @@
 
 This is written in typescript and nodejs 
 
+be aware: this project should be cloned in your local machine cause it makes folders on your machine.
+
 ## Installation
 
-First you should installed [node](https://nodejs.org/en/download) and [git](https://www.git-scm.com/downloads) on your machine.
+First you should installed [node](https://nodejs.org/en/download) and [git](https://www.git-scm.com/downloads) on your machine(or wihtout installing git just download the zip format).
 
 if you've installed them already, move on to next step.
 
